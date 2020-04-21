@@ -14,7 +14,7 @@ Snake Game in JS pure
 - [ ]  A cobra quando encosta em si mesma o jogo reinicia
 - [ ]  A cobra quando alcança a parede o jogo reinicia
 
-## Inpirations:
+## Inspirations:
 
 [Snake Game in Javascript](https://codepen.io/borkro/pen/JvZJxq)
 
