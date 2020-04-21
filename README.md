@@ -1,8 +1,8 @@
 # snake
 Snake Game in JS pure
 
-[![Commits](https://badgen.net/github/commits/nicolas-oliveira/snake)](https://github.com/nicolas-oliveira/bethehero/commits/)
-[![Last Commit](https://badgen.net/github/last-commit/nicolas-oliveira/bethehero)](https://github.com/nicolas-oliveira/snake/commits/)
+[![Commits](https://badgen.net/github/commits/nicolas-oliveira/snake)](https://github.com/nicolas-oliveira/snake/commits/)
+[![Last Commit](https://badgen.net/github/last-commit/nicolas-oliveira/snake)](https://github.com/nicolas-oliveira/snake/commits/)
 [![License](https://badgen.net/github/license/nicolas-oliveira/snake)](./LICENSE)
 [![Release](https://badgen.net/github/release/nicolas-oliveira/snake)](#)
 
