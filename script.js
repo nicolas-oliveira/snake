@@ -19,6 +19,8 @@ canvas.width = pixels;
 const size = (pixels / row) - 1;
 const posic = pixels / row;
 
+const spawn = 5;
+
 function grade() {
     for(let i = 0; i < 15; i++)
         for(let j = 0; j < 15; j++){
@@ -28,14 +30,80 @@ function grade() {
             
 }
 grade();
+    
 
-function showArrowsScreen() {
+function apple() {
+    render.fillStyle = 'red';
+    spawnApple();
+}
+apple();
+
+
+function spawnApple() {
+    function randomPosic(min,max){
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function renderSpawn(x, y){
+        render.fillRect(posic*x,posic*y,size,size);
+    }
+    let x = randomPosic(0,row-1);
+    let y = randomPosic(0,row-1);
+    
+    renderSpawn(x,y);
+}
+let dir = {
+    x: 0,
+    y: 0
+};
+
+function controllerDir(){
+    document.addEventListener('keydown', function(e){
+        switch (e.key) {
+            case "ArrowUp":
+                dir.x = 0;
+                dir.y = 1;
+                break;
+            case "ArrowDown":
+                dir.x = 0;
+                dir.y = -1;
+                break;
+            case "ArrowRight":
+                dir.x = 1;
+                dir.y = 0;
+                break;
+            case "ArrowLeft":
+                dir.x = -1;
+                dir.y = 0;
+                break;
+            default:
+                dir.x = 0;
+                dir.y = 0;
+                break;
+        }
+    });
+}
+controllerDir();
+
+function logScreen() {
     const arrowStrings = [
         'up ↑',
         'down ↓',
         'left ←',
-        'right →'
+        'right →',
+        ' '
     ];
+    
+    function dirTxt(text) {
+        var container = document.getElementById('arrow');
+        var dirElement = document.createElement('p');
+        dirElement.innerHTML = text;
+        container.appendChild(dirElement);
+    }
+
+    dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
 
     function writeArrowTxt(text){
         var container = document.getElementById('arrow');
@@ -46,69 +114,84 @@ function showArrowsScreen() {
         switch (e.key) {
             case "ArrowUp":
                 writeArrowTxt(arrowStrings[0]);
+                dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
                 break;
             case "ArrowDown":
                 writeArrowTxt(arrowStrings[1]);
-                break;
-            case "ArrowLeft":
-                writeArrowTxt(arrowStrings[2]);
+                dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
                 break;
             case "ArrowRight":
                 writeArrowTxt(arrowStrings[3]);
+                dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
+                break;
+            case "ArrowLeft":
+                writeArrowTxt(arrowStrings[2]);
+                dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
                 break;
             default:
+                writeArrowTxt(arrowStrings[4]);
+                dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
                 break;
         }
     });
 }
-showArrowsScreen();
+logScreen();
 
 function spawnSnake(){
     render.fillStyle = 'green';
-    render.fillRect(posic*5,posic*7,size,size);
-    render.fillRect(posic*6,posic*7,size,size);
-    render.fillRect(posic*7,posic*7,size,size);
+    render.fillRect(posic*5,posic*5,size,size);
 }
 
-let points = 2;
-
-function spawnApple() {
-    function randomPosic(min,max){
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    function renderSpawn(x, y){
-        render.fillRect(posic*x,posic*y,size,size);
-    }
-    let x = randomPosic(0,row-1);
-    let y = randomPosic(0,row-1);
-    renderSpawn(x,y);
-}
-
-function apple() {
-    render.fillStyle = 'red';
-    spawnApple();
-}
-apple();
+let points = 0;
 
 function snake() {
     spawnSnake();
-    function body(j){
-        render.fillStyle = 'white';
-        render.clearRect(posic*(j-1),posic*7,size,size);
-        render.fillRect(posic*(j),posic*7,size,size);
-        
-        for(let n = 0; n < points; n++)
-            render.fillRect(posic*(++j),posic*7,size,size);
+
+    function renderPosic(x,y,oldX,oldY){
+        render.fillStyle = 'green';
+        render.clearRect(posic*oldX,posic*oldY,size,size);
+        render.fillRect(posic*x,posic*y,size,size);
     }
 
     function motion() {
-        for (var num = 5; num < (row - points); num++) {
-          setTimeout((j) => {
-            body(j);
-          }, num * 170, num);
+        let head = {
+            x: spawn,
+            y: spawn
+        };
+
+        let tail = {
+            x: spawn - points,
+            y: spawn - points
+        };
+
+        function update(){
+            if(dir.x !== 0 && dir.y !== 0){
+                tail.x = head.x;
+                tail.y = head.y;
+            }
         }
+        document.addEventListener('keydown', () => {
+            if(dir.x === 1){//right
+                head.x++;
+                update();
+                renderPosic(head.x,head.y,tail.x,tail.y);
+            }
+            if(dir.x === -1){//left
+                head.x--;
+                update();
+                renderPosic(head.x,head.y,tail.x,tail.y);
+            }
+            if(dir.y === 1){//up
+                head.y--;
+                update();
+                renderPosic(head.x,head.y,tail.x,tail.y);
+            }
+            if(dir.y === -1){//down
+                head.y++;
+                update();
+                renderPosic(head.x,head.y,tail.x,tail.y);
+            }
+        });
     }
     motion();
 }
