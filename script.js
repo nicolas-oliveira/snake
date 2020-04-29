@@ -45,10 +45,8 @@ let key = 4;
 let visible = false;
 
 function getScore(){
-    let container = document.getElementById('title');
-    let element = createElement('p');
-    element.innerHTML = `Score: ${score}`;
-    container.appendChild(element);
+    let text = document.getElementById('score');
+    text.innerHTML = `Score: ${score}`;
 }
 function renderRtc(x,y){
     render.fillRect(cell*x,cell*y,size,size);
@@ -128,6 +126,8 @@ function logScreen() {
 }
 function reset(){
     start = false;
+    score = 0;
+    getScore();
     clearAll();
     dirApple = apple();
     tail = [];
@@ -250,6 +250,7 @@ function snake() {
             if(tail[0].x === dirApple.x && tail[0].y === dirApple.y){
                 dirApple = apple();
                 increment();
+                getScore();
             }
             setTimeout(animation,1000/15);
         }, 1000/10)       
