@@ -38,11 +38,18 @@ let dir = {
 };
 
 let score = 0;
+
 let tail = [];
 let start = false;
 let key = 4;
 let visible = false;
 
+function getScore(){
+    let container = document.getElementById('title');
+    let element = createElement('p');
+    element.innerHTML = `Score: ${score}`;
+    container.appendChild(element);
+}
 function renderRtc(x,y){
     render.fillRect(cell*x,cell*y,size,size);
 }
@@ -52,12 +59,6 @@ function clearRtc(oldx, oldy){
 function clearAll(){
     render.clearRect(0,0, canvas.width, canvas.height);
 }
-function dirTxt(text) {
-    var container = document.getElementById('arrow');
-    var dirElement = document.createElement('p');
-    dirElement.innerHTML = text;
-    container.appendChild(dirElement);
-}
 function logScreen() {
     const arrowStrings = [
         'up ↑',
@@ -66,7 +67,12 @@ function logScreen() {
         'left ←',
         'none'
     ];
-
+    function dirTxt(text) {
+        var container = document.getElementById('arrow');
+        var dirElement = document.createElement('p');
+        dirElement.innerHTML = text;
+        container.appendChild(dirElement);
+    }
     function writeArrowTxt(text){
         var container = document.getElementById('arrow');
         container.innerHTML = text;
@@ -79,7 +85,12 @@ function logScreen() {
             dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
             dirTxt(`<br>Snake`);
             for(n in tail){
-                dirTxt(`{${tail[n].x},${tail[n].y}}`);
+                if(n < 5)
+                    dirTxt(`{${tail[n].x},${tail[n].y}}`);
+                if(n > 5){
+                    dirTxt(`{...}`);
+                    break;
+                }   
             }
             dirTxt(`length: ${tail.length}`);
             dirTxt(`<br>Apple`);
@@ -106,14 +117,8 @@ function logScreen() {
                 menuLog();
                 break;
             case "z":
-                console.log(visible);
-                if(visible){
-                    visible = false;
-                    document.getElementById('arrow').innerHTML = "";
-                }else{
-                    visible = true;
-                }
-                console.log(visible);
+                visible = !visible;
+                document.getElementById('arrow').innerHTML = "";
             default:
                 key = 4;
                 menuLog();
@@ -155,24 +160,28 @@ function controllerDir(){
     document.addEventListener('keydown', function(e){
         switch (e.key) {
             case "ArrowRight":
-                dir.x = 1;
-                dir.y = 0;
-                break;
-            case "ArrowUp":
-                dir.x = 0;
-                dir.y = -1;
-                break;
-            case "ArrowDown":
-                dir.x = 0;
-                dir.y = 1;
+                if(dir.x != -1){
+                    dir.x = 1;
+                    dir.y = 0;
+                }
                 break;
             case "ArrowLeft":
-                dir.x = -1;
-                dir.y = 0;
+                if(start && dir.x != 1){
+                    dir.x = -1;
+                    dir.y = 0;
+                }
                 break;
-            default:
-                dir.x = 0;
-                dir.y = 0;
+            case "ArrowUp":
+                if(dir.y != 1){
+                    dir.x = 0;
+                    dir.y = -1;
+                }
+                break;
+            case "ArrowDown":
+                if(dir.y != -1){
+                    dir.x = 0;
+                    dir.y = 1;
+                }
                 break;
         }
     });
@@ -193,13 +202,23 @@ function spawnSnake(tail){
 function snake() {
     spawnSnake(tail);
     function increment(){
+        render.fillStyle = 'green';
         tail.push({
             x: tail[tail.length -1].x,
             y: tail[tail.length -1].y
         });
+        score++;
+    }
+    function isBody(x,y){
+        for(t in tail){
+            if(t > 0)
+                if(x === tail[t].x && y === tail[t].y)
+                    return true;
+        }
+        return false;
     }
     function motion(){
-        start = false;
+        start = true;
         let end = [{
             x: tail[tail.length - 1].x,
             y: tail[tail.length - 1].y
@@ -221,7 +240,10 @@ function snake() {
             if(tail[0].x < 0 || tail[0].y < 0 || tail[0].y*cell === canvas.height || tail[0].x*cell === canvas.width){
                 clearTimeout(animation);
                 reset();
-            }        
+            }
+            if(isBody(tail[0].x,tail[0].y)){
+                reset();
+            }
             if(dir.x !== 0 || dir.y !== 0){
                 motion();
             }
@@ -229,11 +251,10 @@ function snake() {
                 dirApple = apple();
                 increment();
             }
-
-            setTimeout(animation,1000/20);
+            setTimeout(animation,1000/15);
         }, 1000/10)       
     }
-    setTimeout(animation,1000/20);
+    setTimeout(animation,1000/15);
 
 }
 snake();
