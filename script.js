@@ -1,27 +1,36 @@
+// 888b    888 8888888 .d8888b.  888    d8P    .d8888b.        d8888  .d8888b.  8888888888 
+// 8888b   888   888  d88P  Y88b 888   d8P    d88P  Y88b      d88888 d88P  Y88b 888        
+// 88888b  888   888  888    888 888  d8P     888    888     d88P888 888    888 888        
+// 888Y88b 888   888  888        888d88K      888           d88P 888 888        8888888    
+// 888 Y88b888   888  888        8888888b     888          d88P  888 888  88888 888        
+// 888  Y88888   888  888    888 888  Y88b    888    888  d88P   888 888    888 888        
+// 888   Y8888   888  Y88b  d88P 888   Y88b   Y88b  d88P d8888888888 Y88b  d88P 888        
+// 888    Y888 8888888 "Y8888P"  888    Y88b   "Y8888P" d88P     888  "Y8888P88 8888888888 
+// Feito por Nicolas Oliveira em Abril de 2020
 // [][][][] |
-// [][][][] | row é definido pela quantidade de quadrados do quadrado canvas
+// [][][][] | Aqui se obtém um plano cartesiano onde começa em (0,0) e termina em (n,m)
+// [][][][] | onde n e m é literalmente a posição final em pixels do canvas = canvas.width, canvas.height
 // [][][][] |
 // -> render é o objeto que renderiza pela tag canvas
-// -> pixels é o tamanho do container do canvas em pixels
-// -> size é o tamanho do quadrado 
+// -> size é o tamanho do quadrado -1 pixel para a borda
 // é definido pelo tamanho do canvas dividido pelas colunas menos um pixel para a borda
-// -> cell é a constante da linha da celula, ele que irá preencher o espaço do quadrado
-// na posição adequada.
-// Dessa forma as posições no jogo são definidos de 0 até 14 totalizando 15 colunas ou row
-// para obter a renderização multiplica-se cell*(posição) que se necessita.
+// -> cell é a constante do tamanho da celula, ele que irá preencher o espaço do quadrado
+// -> row são as linhas
+// -> col são as colunas
+// -> é necessário que os números sejam ímpares para que a snake spawne em um centro
+// a cobra se locomove devido a multiplicação entre a constante cell e sua posição relativa
+// render.fillRect(35*0,35*0,34,34) -> renderiza literalmente um quadrado com borda de 1 px no canto superior
 const canvas = document.getElementById('game');
 const render = canvas.getContext('2d');
 
-const pixels = 525;
+const cell = 35;
 const row = 15;
+const col = 15;
 
-canvas.height = pixels;
-canvas.width = pixels;
+canvas.height = row*cell;
+canvas.width = col*cell;
 
-const size = (pixels / row) - 1;
-const cell = pixels / row;
-
-const spawn = 5;
+const size = cell - 1;
 
 let dir = {
     x: 0,
@@ -30,6 +39,9 @@ let dir = {
 
 let score = 0;
 let tail = [];
+let start = false;
+let key = 4;
+let visible = false;
 
 function renderRtc(x,y){
     render.fillRect(cell*x,cell*y,size,size);
@@ -40,6 +52,12 @@ function clearRtc(oldx, oldy){
 function clearAll(){
     render.clearRect(0,0, canvas.width, canvas.height);
 }
+function dirTxt(text) {
+    var container = document.getElementById('arrow');
+    var dirElement = document.createElement('p');
+    dirElement.innerHTML = text;
+    container.appendChild(dirElement);
+}
 function logScreen() {
     const arrowStrings = [
         'up ↑',
@@ -48,23 +66,16 @@ function logScreen() {
         'left ←',
         'none'
     ];
-    let visible = true;
-    function dirTxt(text) {
-        var container = document.getElementById('arrow');
-        var dirElement = document.createElement('p');
-        dirElement.innerHTML = text;
-        container.appendChild(dirElement);
-    }
 
     function writeArrowTxt(text){
         var container = document.getElementById('arrow');
         container.innerHTML = text;
     }
-    function menuLog(t){
+    function menuLog(){
         if(visible){
             let title = 'Dev Tools';
             writeArrowTxt(title);
-            dirTxt(`Dir: ${arrowStrings[t]}`);
+            dirTxt(`Dir: ${arrowStrings[key]}`);
             dirTxt(`x: ${dir.x}<br>y: ${dir.y}`);
             dirTxt(`<br>Snake`);
             for(n in tail){
@@ -79,34 +90,40 @@ function logScreen() {
     document.addEventListener('keydown', function(e){
         switch (e.key) {
             case "ArrowUp":
-                menuLog(0);
+                key = 0;
+                menuLog();
                 break;
             case "ArrowDown":
-                menuLog(1);
+                key = 1;
+                menuLog();
                 break;
             case "ArrowRight":
-                menuLog(2);
-
+                key = 2;
+                menuLog();
                 break;
             case "ArrowLeft":
-                menuLog(3);
+                key = 3;
+                menuLog();
                 break;
             case "z":
+                console.log(visible);
                 if(visible){
                     visible = false;
                     document.getElementById('arrow').innerHTML = "";
                 }else{
                     visible = true;
                 }
+                console.log(visible);
             default:
-                menuLog(4);
+                key = 4;
+                menuLog();
                 break;
         }
     });
 }
 function reset(){
+    start = false;
     clearAll();
-    grade();
     dirApple = apple();
     tail = [];
     dir = {
@@ -117,14 +134,6 @@ function reset(){
     document.getElementById('arrow').innerHTML = "";
     logScreen();
 }
-function grade() {
-    for(let i = 0; i < row; i++)
-        for(let j = 0; j < row; j++){
-            render.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            renderRtc(i,j);
-        }    
-}
-grade();
 
 function apple() {
     render.fillStyle = 'red';
@@ -134,7 +143,7 @@ function apple() {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     let posicApple = {
-        x: randomCell(0,row-1),
+        x: randomCell(0,col-1),
         y: randomCell(0,row-1)
     }
     renderRtc(posicApple.x, posicApple.y);
@@ -172,9 +181,9 @@ controllerDir();
 
 function spawnSnake(tail){
     render.fillStyle = 'green';
-    for(let t = 0; t < 1; t++){
+    for(let t = 0; t < 3; t++){
         tail.push({
-            x: (row - 1) / 2 - t,
+            x: (col - 1) / 2 - t,
             y: (row - 1) / 2
         });
         renderRtc(tail[t].x,tail[0].y);
@@ -182,92 +191,50 @@ function spawnSnake(tail){
 }    
 
 function snake() {
-
     spawnSnake(tail);
-    function limit(){
-        if(tail[0].x > (row-1) || tail[0].x < 0 || tail[0].y > (row-1) || tail[0].y < 0){
-            return true;
-        }else{
-            return false;
-        }
+    function increment(){
+        tail.push({
+            x: tail[tail.length -1].x,
+            y: tail[tail.length -1].y
+        });
     }
     function motion(){
-        if(dir.x === 1){
-            if(limit()){
-                reset();
-            }else{
-                for(t in tail){
-                    tail.push({
-                        x: tail[t].x++,
-                        y: tail[t].y
-                    });
-                    tail.pop();
-    
-                    clearRtc(tail[t].x-1,tail[t].y);
-                    renderRtc(tail[t].x,tail[t].y);
-                }
-            }
+        start = false;
+        let end = [{
+            x: tail[tail.length - 1].x,
+            y: tail[tail.length - 1].y
+        }];
+        for (let t = tail.length - 1; t > 0; t--) {
+            tail[t].x = tail[t - 1].x;
+            tail[t].y = tail[t - 1].y;
         }
-        if(dir.x === -1){
-            if(limit()){
-                reset();
-            }else{
-                for(t in tail){
-                    tail.push({
-                        x: tail[t].x--,
-                        y: tail[t].y
-                    });
-                    tail.pop();
-                    clearRtc(tail[t].x+1,tail[t].y);                    
-                    renderRtc(tail[t].x,tail[t].y);
-                }
-
-            }
+        tail[0].x += dir.x;
+        tail[0].y += dir.y;
+        for(t in tail){
+            renderRtc(tail[t].x,tail[t].y);
         }
-        if(dir.y === -1){
-            if(limit()){
-                reset();
-            }else{
-                for(t in tail){
-                    tail.push({
-                        x: tail[t].x,
-                        y: tail[t].y--
-                    });
-                    tail.pop();
-    
-                    clearRtc(tail[t].x,tail[t].y+1);
-                    renderRtc(tail[t].x,tail[t].y);
-                }
-
-            }
-        }
-        if(dir.y === 1){
-            if(limit()){
-                reset();
-            }else{
-                for(t in tail){
-                    tail.push({
-                        x: tail[t].x,
-                        y: tail[t].y++
-                    });
-                    tail.pop();
-    
-                    clearRtc(tail[t].x,tail[t].y-1);
-                    renderRtc(tail[t].x,tail[t].y);
-                }
-            }
-        }
-
+        clearRtc(end[0].x,end[0].y)
     }
 
-    document.addEventListener('keydown', () => {
-        if(dir.x !== 0 || dir.y !== 0){//right
-            motion();
-        } 
-    });
-    
+    function animation(){
+        setTimeout(()=>{
+            if(tail[0].x < 0 || tail[0].y < 0 || tail[0].y*cell === canvas.height || tail[0].x*cell === canvas.width){
+                clearTimeout(animation);
+                reset();
+            }        
+            if(dir.x !== 0 || dir.y !== 0){
+                motion();
+            }
+            if(tail[0].x === dirApple.x && tail[0].y === dirApple.y){
+                dirApple = apple();
+                increment();
+            }
+
+            setTimeout(animation,1000/20);
+        }, 1000/10)       
+    }
+    setTimeout(animation,1000/20);
+
 }
 snake();
-render.fillStyle = 'blue';
-
 logScreen();
