@@ -136,6 +136,8 @@ function reset(){
         y: 0
     }
     spawnSnake(tail);
+    document.getElementById('arrow').innerHTML = "";
+    logScreen();
 }
 
 function apple() {
@@ -148,11 +150,6 @@ function apple() {
     let posicApple = {
         x: randomCell(0,col-1),
         y: randomCell(0,row-1)
-    }
-    for(t in tail){
-        if(t > 0)
-            if(posicApple.x === tail[t].x && posicApple.y === tail[t].y)
-                apple();
     }
     renderRtc(posicApple.x, posicApple.y);
     return posicApple;
@@ -255,10 +252,10 @@ function snake() {
                 increment();
                 getScore();
             }
-            setTimeout(animation,1000/30);
+            setTimeout(animation,1000/15);
         }, 1000/10)       
     }
-    setTimeout(animation,1000/30);
+    setTimeout(animation,1000/15);
 
 }
 snake();
