@@ -15,8 +15,9 @@
         <img alt="Release" src="https://badgen.net/github/release/nicolas-oliveira/snake"></img>
     </a>
 </p>
-
-[Link to the Game](https://nicolas-oliveira.github.io/snake/) - *Still in beta*
+<p align="center">
+    <a href="https://nicolas-oliveira.github.io/snake/">[Link to the Game]</a>
+</p>
 
 # User stories
 
