@@ -1,7 +1,7 @@
 <h1 align="center">snake</h1>
 <h3 align="center">Snake Game in JS pure</h3>
 
-<p align="center">
+<h1 align="center">
     <a href="https://github.com/nicolas-oliveira/snake/commits/">
         <img alt="GitHub commits count" src="https://badgen.net/github/commits/nicolas-oliveira/snake"></img>
     </a>
@@ -14,7 +14,7 @@
     <a href="#">
         <img alt="Release" src="https://badgen.net/github/release/nicolas-oliveira/snake"></img>
     </a>
-</p>
+</h1>
 <p align="center">
     <a href="https://nicolas-oliveira.github.io/snake/">[Link to the Game]</a>
 </p>
