@@ -5,11 +5,16 @@
     <a href="https://github.com/nicolas-oliveira/snake/commits/">
         <img alt="GitHub commits count" src="https://badgen.net/github/commits/nicolas-oliveira/snake"></img>
     </a>
+    <a href="https://github.com/nicolas-oliveira/snake/commits/">
+        <img alt="Last Commit" src="https://badgen.net/github/last-commit/nicolas-oliveira/snake"></img>
+    </a>
+    <a href="./LICENSE">
+        <img alt="License" src="https://badgen.net/github/license/nicolas-oliveira/snake"></img>
+    </a>
+    <a href="#">
+        <img alt="Release" src="https://badgen.net/github/release/nicolas-oliveira/snake"></img>
+    </a>
 </p>
-
-[![Last Commit](https://badgen.net/github/last-commit/nicolas-oliveira/snake)](https://github.com/nicolas-oliveira/snake/commits/)
-[![License](https://badgen.net/github/license/nicolas-oliveira/snake)](./LICENSE)
-[![Release](https://badgen.net/github/release/nicolas-oliveira/snake)](#)
 
 [Link to the Game](https://nicolas-oliveira.github.io/snake/) - *Still in beta*
 
