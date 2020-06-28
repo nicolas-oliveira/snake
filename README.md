@@ -5,9 +5,7 @@
     <a href="https://github.com/nicolas-oliveira/snake/commits/">
         <img alt="GitHub commits count" src="https://badgen.net/github/commits/nicolas-oliveira/snake"></img>
     </a>
-    <a href="https://github.com/nicolas-oliveira/snake/commits/">
-        <img alt="Last Tag" src="https://badgen.net/github/tag/nicolas-oliveira/make-scrollbars-great-again"></img>
-    </a>
+        <img alt="Last Commit" src="https://badgen.net/github/last-commit/nicolas-oliveira/snake"></img>
     <a href="./LICENSE">
         <img alt="License" src="https://badgen.net/github/license/nicolas-oliveira/snake"></img>
     </a>
