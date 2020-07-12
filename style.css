@@ -1,102 +1,116 @@
-@import url(https://fonts.googleapis.com/css?family=VT323);
+@font-face {
+  font-family: "VT323";
+  src: url("/fonts/VT323-Regular.ttf");
+} 
 *,
 html {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 body {
-    height: 100%;
-    background-color: #1d1d1d;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-    font-family: 'VT323', Courier;
-    overflow: hidden;
+  height: 100%;
+  background-color: #1d1d1d;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  font-family: 'VT323', Arial;
+  overflow: hidden;
 }
+.block {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 0;
+}
+.block img {
+  position: absolute;
+  height: 115px;
+  top: -0.3em;
+  left: 62%;
+  z-index: 1;
+}
+.block p {
+  font-size: 27px;
+}
+.title {
+  font-size: 30px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+.game {
+  border: solid 4px #fff;
+}
+/* 
+ * Developer 'z' infos 
+ */
+.arrow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 13.7px;
+  font-size: 31.5px;
+  font-weight: bold;
+}
+/* 
+ * Animations for retro screen 
+ */
 @keyframes scan {
 	from { top: 0 }
 	to { top: 100% }
 }
-
 @keyframes flicker {
-    0% { opacity: 0.15795 }
-    5% { opacity: 0.31511 }
-    10% { opacity: 0.94554 }
-    15% { opacity: 0.2469 }
-    20% { opacity: 0.62031 }
-    25% { opacity: 0.0293 }
-    30% { opacity: 0.00899 }
-    35% { opacity: 0.5344 }
-    40% { opacity: 0.12778 }
-    45% { opacity: 0.52042 }
-    50% { opacity: 0.3823 }
-    55% { opacity: 0.2198 }
-    60% { opacity: 0.9383 }
-    65% { opacity: 0.86615 }
-    70% { opacity: 0.68695 }
-    75% { opacity: 0.55749 }
-    80% { opacity: 0.96984 }
-    85% { opacity: 0.0361 }
-    90% { opacity: 0.24467 }
-    95% { opacity: 0.08351 }
-    100% { opacity: 0.54813 }
+  0% { opacity: 0.15795 }
+  5% { opacity: 0.31511 }
+  10% { opacity: 0.94554 }
+  15% { opacity: 0.2469 }
+  20% { opacity: 0.62031 }
+  25% { opacity: 0.0293 }
+  30% { opacity: 0.00899 }
+  35% { opacity: 0.5344 }
+  40% { opacity: 0.12778 }
+  45% { opacity: 0.52042 }
+  50% { opacity: 0.3823 }
+  55% { opacity: 0.2198 }
+  60% { opacity: 0.9383 }
+  65% { opacity: 0.86615 }
+  70% { opacity: 0.68695 }
+  75% { opacity: 0.55749 }
+  80% { opacity: 0.96984 }
+  85% { opacity: 0.0361 }
+  90% { opacity: 0.24467 }
+  95% { opacity: 0.08351 }
+  100% { opacity: 0.54813 }
 }
-.block {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-.block p {
-    font-size: 30px;
-    top: 80px;
-    left: 60%;
-}
-.title {
-    font-size: 30px;
-    line-height: 2;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.game {
-    border: solid 4px #fff;
-}
-.arrow {
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 13.7px;
-    font-size: 31.5px;
-    font-weight: bold;
-}
-
 .overlay {
-	height: 1px;
+	height: 3px;
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 1px;
+  width: 0px;
 }
-
 .overlay:before {
-	background: linear-gradient(#181818 50%, rgba(16, 16, 16, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.03));
-	background-size: 100% 2px, 300px 100%;
+  background: 
+    linear-gradient(#181818 50%, rgba(16, 16, 16, 0.2) 50%), 
+    linear-gradient(90deg, rgba(255, 0, 0, 0.039), rgba(65, 117, 65, 0.069), rgba(0, 0, 255,  0.089));
+	background-size: 100% 0.129em, 100% 100%;
 	content: "";
 	display: block;
 	pointer-events: none;
 	position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 	z-index: 2;
 }
-
 .overlay:after {
 	animation: flicker 0.3s infinite;
 	background: rgba(22, 22, 22, 0.2);
@@ -104,9 +118,9 @@ body {
 	display: block;
 	pointer-events: none;
 	position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 	z-index: 2;
 }

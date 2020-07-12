@@ -8,14 +8,15 @@
 // 888    Y888 8888888 "Y8888P"  888    Y88b   "Y8888P" d88P     888  "Y8888P88 8888888888
 //
 // Feito por Nicolas Oliveira em Abril de 2020
-//
+// <nicolas.oliveira.ug@gmail.com>
+// License: MIT
 
 const canvas = document.getElementById("game");
 // -> render é o objeto que renderiza pela tag canvas
 const render = canvas.getContext("2d");
 
 // -> cell é a constante do tamanho da celula, ele que irá preencher o espaço do quadrado
-const cell = 35;
+const cell = 36;
 // -> row são as linhas
 const row = 15;
 // -> col são as colunas
@@ -151,24 +152,19 @@ function reset() {
 function apple() {
   render.fillStyle = "red";
 	
+	let posicApple = {
+    x: randomCell(0, col - 1),
+    y: randomCell(0, row - 1),
+	};
+
 	function randomCell(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-	
-	let posicApple = {
-    x: randomCell(0, col - 1),
-    y: randomCell(0, row - 1),
-  };
-	
-	for (t in tail) {
-    if (t > 0)
-      if (posicApple.x === tail[t].x && posicApple.y === tail[t].y) apple();
-  }
-	
+	}
+
 	renderRtc(posicApple.x, posicApple.y);
-	
+		
 	return posicApple;
 }
 let dirApple = apple();
@@ -228,13 +224,15 @@ function snake() {
     score++;
 	}
 	
+	// Verifica se a cobra enconstou no próprio corpo
   function isBody(x, y) {
     for (t in tail) {
-      if (t > 0) if (x === tail[t].x && y === tail[t].y) return true;
+			if ((t > 0) && (x === tail[t].x && y === tail[t].y)) return true;
     }
     return false;
 	}
 	
+	// Função responsável pelo movimento e incrementação do corpo
   function motion() {
     start = true;
     let end = [
@@ -267,13 +265,22 @@ function snake() {
         reset();
 			}
       if (isBody(tail[0].x, tail[0].y)) {
+				clearTimeout(animation);
         reset();
+			}
+				
+			// // Verifica se a maçã renderizou em cima da snake
+			for (t in tail) {
+				if ((t > 0) && (dirApple.x === tail[t].x && dirApple.y === tail[t].y)) {
+					dirApple = apple();
+					render.fillStyle = "green";
+				}
 			}
       if (dir.x !== 0 || dir.y !== 0) {
         motion();
 			}
       if (tail[0].x === dirApple.x && tail[0].y === dirApple.y) {
-        dirApple = apple();
+				dirApple = apple();
         increment();
         getScore();
 			}
